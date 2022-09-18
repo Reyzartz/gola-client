@@ -1,5 +1,7 @@
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+
 module.exports = {
-  stories: ['../components/**/*.stories.@(js|jsx|ts|tsx)'],
+  stories: ['../components/**/*.stories.@(ts|tsx)'],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
@@ -13,9 +15,23 @@ module.exports = {
       }
     }
   ],
+  features: {
+    postcss: true,
+    storyStoreV7: true
+  },
   framework: '@storybook/react',
   core: {
-    builder: '@storybook/builder-webpack5'
+    builder: {
+      name: 'webpack5',
+      options: {
+        lazyCompilation: false,
+        fsCache: true
+      }
+    }
   },
-  staticDirs: ['../public']
+  staticDirs: ['../public'],
+  webpackFinal: async (config, { configType }) => {
+    config.resolve.plugins = [new TsconfigPathsPlugin()]
+    return config
+  }
 }

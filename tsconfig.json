@@ -18,7 +18,9 @@
     "paths": {
       "@features/*": ["components/features/*"],
       "@components/shared": ["components/shared"],
-      "@components/ui": ["components/ui"]
+      "@components/ui": ["components/ui"],
+      "@common/*": ["./common/*"],
+      "@helpers/*": ["./helpers/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
