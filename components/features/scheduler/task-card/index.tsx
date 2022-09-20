@@ -7,7 +7,7 @@ interface Props {
 
 const TaskCard = ({ task: { title } }: Props) => {
   return (
-    <div className='p-4 border-2 rounded-lg bg-slate-200 border-slate-400 max-w-max'>
+    <div className='p-3 text-sm border-2 rounded-md bg-slate-200 border-slate-400 max-w-max'>
       {title}
     </div>
   )

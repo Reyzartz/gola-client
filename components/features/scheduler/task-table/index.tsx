@@ -1,20 +1,16 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import { TaskCard, TasksList } from '@features/scheduler'
 import { ITask } from '@common/types'
-import { WEEK_DAYS } from '@common/constants'
+import { addDays, format } from 'date-fns'
+import { getStartDate, getWeeklyTasks } from '@helpers/utils'
 
-interface IColumnWrapperProps {
-  title: string
-  children: React.ReactNode
-}
-
-const ColumnWrapper = ({ title, children }: IColumnWrapperProps) => {
+const ColumnHeader = ({ date }: { date: Date }) => {
   return (
-    <div>
-      <div>
-        <h3 className='py-2 text-lg font-semibold capitalize'>{title}</h3>
-      </div>
-      {children}
+    <div className='py-2'>
+      <h3 className='text-lg font-semibold capitalize '>
+        {format(date, 'EEEE')}
+      </h3>
+      <h5 className='text-sm capitalize '>{format(date, 'd LLLL')}</h5>
     </div>
   )
 }
@@ -24,14 +20,30 @@ interface Props {
 }
 
 const ScheduleTable = ({ tasks }: Props) => {
+  const [weeklyIndex, setWeeklyIndex] = useState(0)
+
+  const startDate = useMemo(() => getStartDate(tasks), [tasks])
+  const weeklyTasks = useMemo(() => getWeeklyTasks(tasks), [tasks])
+
+  console.log({ weeklyTasks })
+
   return (
-    <div className='flex gap-3'>
-      {WEEK_DAYS.map(day => (
-        <ColumnWrapper title={day} key={day}>
-          <TasksList tasks={tasks} listItemComponent={TaskCard} />
-        </ColumnWrapper>
-      ))}
-    </div>
+    <section>
+      <div className='flex gap-4'>
+        <button onClick={() => setWeeklyIndex(weeklyIndex - 1)}>&lt;</button>
+        {format(addDays(startDate, weeklyIndex * 7), 'd LLLL')} -{' '}
+        {format(addDays(startDate, weeklyIndex * 7 + 6), 'd LLLL')}
+        <button onClick={() => setWeeklyIndex(weeklyIndex + 1)}>&gt;</button>
+      </div>
+      <div className='grid grid-cols-7 gap-2'>
+        {weeklyTasks[weeklyIndex].map((days, ind) => (
+          <div key={ind}>
+            <ColumnHeader date={addDays(startDate, ind + weeklyIndex * 7)} />
+            <TasksList tasks={days} listItemComponent={TaskCard} />
+          </div>
+        ))}
+      </div>
+    </section>
   )
 }
 

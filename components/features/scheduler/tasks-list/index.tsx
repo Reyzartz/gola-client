@@ -8,7 +8,7 @@ interface Props {
 
 const TasksList = ({ tasks, listItemComponent: ListItem }: Props) => {
   return (
-    <ul className='flex flex-col gap-3 max-w-max'>
+    <ul className='flex flex-col gap-2 max-w-max'>
       {tasks.map(task => (
         <ListItem task={task} key={task.id} />
       ))}
