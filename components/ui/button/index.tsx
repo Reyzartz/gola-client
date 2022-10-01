@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 
 type IButtonVariant = 'contained' | 'outlined' | 'text'
 type IButtonSizes = 'small' | 'medium' | 'large' | 'string'
@@ -12,54 +12,148 @@ interface IButtonProps {
   children: ReactNode
 }
 
-const ButtonColors: Record<IButtonColors, string> = {
-  primary: 'blue-400',
-  secondary: 'gray-200',
-  error: 'red-400',
-  success: 'green-400',
-  warning: 'yellow-400'
+const ButtonBackgroundColors: Record<IButtonColors, string> = {
+  primary: 'bg-primary-400',
+  secondary: 'bg-neutral-400',
+  error: 'bg-error-400',
+  warning: 'bg-warning-400',
+  success: 'bg-success-400'
+}
+
+const ButtonTextColors: Record<IButtonColors, string> = {
+  primary: 'text-primary-500',
+  secondary: 'text-neutral-500',
+  error: 'text-error-500',
+  warning: 'text-warning-500',
+  success: 'text-success-500'
+}
+
+const ButtonBorderColors: Record<IButtonColors, string> = {
+  primary: 'border-primary-500',
+  secondary: 'border-neutral-500',
+  error: 'border-error-500',
+  warning: 'border-warning-500',
+  success: 'border-success-500'
+}
+
+const ButtonContainedHoverColors: Record<IButtonColors, string> = {
+  primary: 'hover:bg-primary-500',
+  secondary: 'hover:bg-neutral-500',
+  error: 'hover:bg-error-500',
+  warning: 'hover:bg-warning-500',
+  success: 'hover:bg-success-500'
+}
+
+const ButtonOutlinedHoverColors: Record<IButtonColors, string> = {
+  primary: 'hover:bg-primary-100',
+  secondary: 'hover:bg-neutral-100',
+  error: 'hover:bg-error-100',
+  warning: 'hover:bg-warning-100',
+  success: 'hover:bg-success-100'
 }
 
 const getSpacing = (size: IButtonSizes, variant: IButtonVariant) => {
-  switch (true) {
-    case size === 'string':
-      return 'p-0'
-    case size === 'large' && variant !== 'text':
-      return 'px-4 py-2'
-    case size === 'medium' && variant !== 'text':
-      return 'px-3 py-1.5'
-    case size === 'small' && variant !== 'text':
-      return 'px-2 py-1'
-    case size === 'large' && variant === 'text':
-      return 'px-2.5 py-2'
-    case size === 'medium' && variant === 'text':
-      return 'px-2 py-1.5'
-    case size === 'small' && variant === 'text':
-      return 'px-1.5 py-1'
+  if (size === 'string') return 'p-0'
+
+  if (size === 'large' && variant !== 'text') return 'px-4 py-2'
+  if (size === 'medium' && variant !== 'text') return 'px-3 py-1.5'
+  if (size === 'small' && variant !== 'text') return 'px-2 py-1'
+
+  if (size === 'large' && variant === 'text') return 'px-2.5 py-2'
+  if (size === 'medium' && variant === 'text') return 'px-2 py-1.5'
+  if (size === 'small' && variant === 'text') return 'px-1.5 py-1'
+}
+
+const getBackgroundStyles = (
+  color: IButtonColors,
+  variant: IButtonVariant,
+  disabled: boolean
+) => {
+  const styles = []
+
+  if (disabled && variant === 'contained') {
+    styles.push('bg-neutral-200')
+    return styles
   }
+
+  if (variant === 'contained') {
+    styles.push(
+      ButtonBackgroundColors[color],
+      ButtonContainedHoverColors[color]
+    )
+  }
+
+  if (variant === 'outlined' && !disabled) {
+    styles.push(ButtonOutlinedHoverColors[color])
+  }
+
+  return styles
 }
 
-const getBackgroundColor = (
+const getTextStyles = (
+  size: IButtonSizes,
   color: IButtonColors,
   variant: IButtonVariant,
   disabled: boolean
 ) => {
-  if (variant !== 'contained') return ''
+  const styles = ['font-medium', 'tracking-wider']
 
-  return `bg-${disabled ? 'gray-400' : ButtonColors[color]}`
+  if (size === 'large') {
+    styles.push('text-lg')
+  }
+
+  if (size === 'medium') {
+    styles.push('text-md')
+  }
+
+  if (size === 'small') {
+    styles.push('text-sm')
+  }
+
+  if (disabled) {
+    styles.push('text-neutral-400')
+    return styles
+  }
+
+  if (variant === 'contained') {
+    styles.push('text-neutral-800')
+  }
+
+  if (variant === 'outlined') {
+    styles.push(ButtonTextColors[color])
+  }
+
+  if (variant === 'text') {
+    styles.push(ButtonTextColors[color], 'hover:underline')
+  }
+
+  return styles
 }
 
-const getBorder = (
+const getBorderStyles = (
   color: IButtonColors,
   variant: IButtonVariant,
   disabled: boolean
 ) => {
-  if (variant !== 'outlined') return ''
+  const styles = ['rounded-md']
 
-  return `border border-${disabled ? 'gray-400' : ButtonColors[color]}`
+  if (variant === 'contained' || variant === 'text') {
+    return styles
+  }
+
+  if (disabled) {
+    styles.push('border', 'border-neutral-400')
+    return styles
+  }
+
+  if (variant === 'outlined') {
+    styles.push('border', ButtonBorderColors[color])
+  }
+
+  return styles
 }
 
-const defaultStyles = () => 'border-box rounded'
+const defaultStyles = () => 'border-box  '
 
 const Button = ({
   size = 'medium',
@@ -68,18 +162,21 @@ const Button = ({
   disabled = false,
   children
 }: IButtonProps) => {
-  return (
-    <button
-      className={[
+  const getClasses = useMemo(
+    () =>
+      [
         defaultStyles(),
         getSpacing(size, variant),
-        getBackgroundColor(color, variant, disabled),
-        getBorder(color, variant, disabled)
-      ].join(' ')}
-    >
-      {children}
-    </button>
+        getBackgroundStyles(color, variant, disabled),
+        getTextStyles(size, color, variant, disabled),
+        getBorderStyles(color, variant, disabled)
+      ]
+        .flat()
+        .join(' '),
+    [color, disabled, size, variant]
   )
+
+  return <button className={getClasses}>{children}</button>
 }
 
 export { Button }
