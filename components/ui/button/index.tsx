@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from 'react'
+import React, { MouseEventHandler, PropsWithChildren, useMemo } from 'react'
 
 type IButtonVariant = 'contained' | 'outlined' | 'text'
 type IButtonSizes = 'small' | 'medium' | 'large' | 'string'
@@ -9,7 +9,8 @@ interface IButtonProps {
   variant?: IButtonVariant
   color?: IButtonColors
   disabled?: boolean
-  children: ReactNode
+  onClick?: MouseEventHandler<HTMLButtonElement>
+  className?: string
 }
 
 const ButtonBackgroundColors: Record<IButtonColors, string> = {
@@ -21,8 +22,8 @@ const ButtonBackgroundColors: Record<IButtonColors, string> = {
 }
 
 const ButtonTextColors: Record<IButtonColors, string> = {
-  primary: 'text-primary-500',
-  secondary: 'text-neutral-500',
+  primary: 'text-primary-600',
+  secondary: 'text-neutral-600',
   error: 'text-error-500',
   warning: 'text-warning-500',
   success: 'text-success-500'
@@ -160,8 +161,10 @@ const Button = ({
   variant = 'contained',
   color = 'secondary',
   disabled = false,
-  children
-}: IButtonProps) => {
+  onClick,
+  children,
+  className
+}: PropsWithChildren<IButtonProps>) => {
   const getClasses = useMemo(
     () =>
       [
@@ -169,14 +172,19 @@ const Button = ({
         getSpacing(size, variant),
         getBackgroundStyles(color, variant, disabled),
         getTextStyles(size, color, variant, disabled),
-        getBorderStyles(color, variant, disabled)
+        getBorderStyles(color, variant, disabled),
+        className
       ]
         .flat()
         .join(' '),
-    [color, disabled, size, variant]
+    [color, disabled, size, variant, className]
   )
 
-  return <button className={getClasses}>{children}</button>
+  return (
+    <button className={getClasses} disabled={disabled} onClick={onClick}>
+      {children}
+    </button>
+  )
 }
 
 export { Button }
