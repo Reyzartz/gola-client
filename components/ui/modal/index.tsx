@@ -1,5 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react'
 import React, { Fragment, PropsWithChildren } from 'react'
+import { Crosshair, X } from 'react-feather'
 import { Button } from '../button'
 
 export interface IModalProps {
@@ -7,6 +8,7 @@ export interface IModalProps {
   onClose: () => void
   static?: boolean
   centered?: boolean
+  children: React.ReactNode | ((props: { open: boolean }) => React.ReactNode)
 }
 
 export interface IModalContentProps {
@@ -19,7 +21,7 @@ const Modal = ({
   onClose,
   static: isStatic = false,
   centered = false
-}: PropsWithChildren<IModalProps>) => {
+}: IModalProps) => {
   return (
     <Transition show={open || isStatic} as={Fragment}>
       <Dialog
@@ -31,7 +33,7 @@ const Modal = ({
           alignItems: centered ? 'center' : 'start'
         }}
       >
-        {children}
+        {typeof children === 'function' ? children({ open }) : children}
 
         <Transition.Child
           as={Fragment}
@@ -76,13 +78,12 @@ const Content = ({
 const CloseButton = ({ onClose }: { onClose: () => void }) => {
   return (
     <Button
-      size='large'
+      size='small'
       variant='text'
       className='absolute text-3xl top-1 right-2'
       onClick={onClose}
-    >
-      ⤫
-    </Button>
+      icon={X}
+    />
   )
 }
 
