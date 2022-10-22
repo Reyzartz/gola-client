@@ -199,7 +199,7 @@ const getIconColor = (
   return color
 }
 
-const defaultStyles = () => ['border-box']
+const defaultStyles = 'border-box'
 
 const Button = memo(
   ({
@@ -221,10 +221,10 @@ const Button = memo(
       [children, icon]
     )
 
-    const getClasses = useMemo(
+    const classNames = useMemo(
       () =>
         [
-          defaultStyles(),
+          defaultStyles,
           getSpacing(size, variant, isIconOnly),
           getBackgroundStyles(color, variant, disabled),
           getTextStyles(size, color, variant, disabled),
@@ -238,7 +238,7 @@ const Button = memo(
     )
 
     return (
-      <button className={getClasses} disabled={disabled} onClick={onClick}>
+      <button className={classNames} disabled={disabled} onClick={onClick}>
         {icon !== undefined && (
           <Icon
             as={icon}

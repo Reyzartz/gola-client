@@ -1,3 +1,5 @@
+import { memo } from 'react'
+
 export type TIconColors =
   | 'primary-light'
   | 'primary'
@@ -52,19 +54,23 @@ export interface IIconProps {
   className?: string
 }
 
-const Icon = ({
-  as: IconComponent,
-  color = 'secondary',
-  size = 'medium',
-  className = ''
-}: IIconProps) => {
-  return (
-    <IconComponent
-      className={className + IconColors[color]}
-      width={IconSizes[size]}
-      height={IconSizes[size]}
-    />
-  )
-}
+const Icon = memo(
+  ({
+    as: IconComponent,
+    color = 'secondary',
+    size = 'medium',
+    className = ''
+  }: IIconProps) => {
+    return (
+      <IconComponent
+        className={className + IconColors[color]}
+        width={IconSizes[size]}
+        height={IconSizes[size]}
+      />
+    )
+  }
+)
+
+Icon.displayName = 'Icon'
 
 export { Icon }
