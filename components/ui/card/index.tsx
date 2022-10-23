@@ -12,7 +12,7 @@ export type TCardSize = 'small' | 'medium' | 'large'
 
 export type TCardVariant = 'elevated' | 'outlined' | 'string'
 
-const CardBackgroundColors: Record<TCardColors, string> = {
+const cardBackgroundColors: Record<TCardColors, string> = {
   white: 'bg-white',
   primary: 'bg-primary-100',
   secondary: 'bg-neutral-100',
@@ -21,7 +21,7 @@ const CardBackgroundColors: Record<TCardColors, string> = {
   success: 'bg-success-100'
 }
 
-const CardBorderColors: Record<TCardColors, string> = {
+const cardBorderColors: Record<TCardColors, string> = {
   white: 'border-neutral-300',
   primary: 'border-primary-300',
   secondary: 'border-neutral-300',
@@ -37,10 +37,6 @@ export interface ICardProps {
   height?: number | string
   size?: TCardSize
   variant?: TCardVariant
-}
-
-const getBackgroundStyles = (color: TCardColors) => {
-  return CardBackgroundColors[color]
 }
 
 const getSpacing = (variant: TCardVariant, size: TCardSize) => {
@@ -59,7 +55,7 @@ const getSpacing = (variant: TCardVariant, size: TCardSize) => {
 const getBorderStyles = (variant: TCardVariant, color: TCardColors) => {
   if (variant !== 'outlined') return ''
 
-  return ['border', CardBorderColors[color]]
+  return ['border', cardBorderColors[color]]
 }
 
 const getShadowStyles = (variant: TCardVariant) => {
@@ -67,7 +63,7 @@ const getShadowStyles = (variant: TCardVariant) => {
 
   return 'shadow'
 }
-const defaultStyles = 'inline-block '
+const defaultStyles = 'inline-block'
 
 const Card = ({
   children,
@@ -82,7 +78,7 @@ const Card = ({
     () =>
       [
         defaultStyles,
-        getBackgroundStyles(color),
+        cardBackgroundColors[color],
         getSpacing(variant, size),
         getBorderStyles(variant, color),
         getShadowStyles(variant),

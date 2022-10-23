@@ -20,7 +20,7 @@ interface IButtonProps {
   icon?: React.ComponentType<any>
 }
 
-const ButtonBackgroundColors: Record<TButtonColors, string> = {
+const buttonBackgroundColors: Record<TButtonColors, string> = {
   primary: 'bg-primary-400',
   secondary: 'bg-neutral-400',
   error: 'bg-error-400',
@@ -28,7 +28,7 @@ const ButtonBackgroundColors: Record<TButtonColors, string> = {
   success: 'bg-success-400'
 }
 
-const ButtonTextColors: Record<TButtonColors, string> = {
+const buttonTextColors: Record<TButtonColors, string> = {
   primary: 'text-primary-500',
   secondary: 'text-neutral-500',
   error: 'text-error-500',
@@ -36,7 +36,7 @@ const ButtonTextColors: Record<TButtonColors, string> = {
   success: 'text-success-500'
 }
 
-const ButtonBorderColors: Record<TButtonColors, string> = {
+const buttonBorderColors: Record<TButtonColors, string> = {
   primary: 'border-primary-500',
   secondary: 'border-neutral-500',
   error: 'border-error-500',
@@ -44,7 +44,7 @@ const ButtonBorderColors: Record<TButtonColors, string> = {
   success: 'border-success-500'
 }
 
-const ButtonContainedHoverColors: Record<TButtonColors, string> = {
+const buttonContainedHoverColors: Record<TButtonColors, string> = {
   primary: 'hover:bg-primary-500',
   secondary: 'hover:bg-neutral-500',
   error: 'hover:bg-error-500',
@@ -52,7 +52,7 @@ const ButtonContainedHoverColors: Record<TButtonColors, string> = {
   success: 'hover:bg-success-500'
 }
 
-const ButtonOutlinedHoverColors: Record<TButtonColors, string> = {
+const buttonOutlinedHoverColors: Record<TButtonColors, string> = {
   primary: 'hover:bg-primary-100',
   secondary: 'hover:bg-neutral-100',
   error: 'hover:bg-error-100',
@@ -94,13 +94,13 @@ const getBackgroundStyles = (
 
   if (variant === 'contained') {
     styles.push(
-      ButtonBackgroundColors[color],
-      ButtonContainedHoverColors[color]
+      buttonBackgroundColors[color],
+      buttonContainedHoverColors[color]
     )
   }
 
   if (variant === 'outlined' && !disabled) {
-    styles.push(ButtonOutlinedHoverColors[color])
+    styles.push(buttonOutlinedHoverColors[color])
   }
 
   return styles
@@ -136,11 +136,11 @@ const getTextStyles = (
   }
 
   if (variant === 'outlined') {
-    styles.push(ButtonTextColors[color])
+    styles.push(buttonTextColors[color])
   }
 
   if (variant === 'text') {
-    styles.push(ButtonTextColors[color], 'hover:underline')
+    styles.push(buttonTextColors[color], 'hover:underline')
   }
 
   return styles
@@ -163,7 +163,7 @@ const getBorderStyles = (
   }
 
   if (variant === 'outlined') {
-    styles.push('border', ButtonBorderColors[color])
+    styles.push('border', buttonBorderColors[color])
   }
 
   return styles
