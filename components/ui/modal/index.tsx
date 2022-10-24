@@ -9,10 +9,17 @@ export interface IModalProps {
   static?: boolean
   centered?: boolean
   children: React.ReactNode | ((props: { open: boolean }) => React.ReactNode)
+  className?: string
 }
 
 export interface IModalContentProps {
   width?: string | number
+  className?: string
+}
+
+export interface ICloseButtonProps {
+  onClose: () => void
+  className?: string
 }
 
 const Modal = ({
@@ -20,7 +27,8 @@ const Modal = ({
   open,
   onClose,
   static: isStatic = false,
-  centered = false
+  centered = false,
+  className
 }: IModalProps) => {
   return (
     <Transition show={open || isStatic} as={Fragment}>
@@ -28,7 +36,10 @@ const Modal = ({
         open={open}
         onClose={onClose}
         static={isStatic}
-        className='fixed top-0 left-0 z-30 flex items-center justify-center w-screen h-screen py-14'
+        className={
+          'fixed top-0 left-0 z-30 flex items-center justify-center w-screen h-screen py-14 ' +
+          className
+        }
         style={{
           alignItems: centered ? 'center' : 'start'
         }}
@@ -53,7 +64,8 @@ const Modal = ({
 
 const Content = ({
   children,
-  width = 420
+  width = 420,
+  className
 }: PropsWithChildren<IModalContentProps>) => {
   return (
     <Transition.Child
@@ -66,7 +78,10 @@ const Content = ({
       leaveTo='opacity-0 scale-95'
     >
       <Dialog.Panel
-        className='relative flex flex-col max-h-full rounded-lg shadow-lg bg-neutral-25'
+        className={
+          'relative flex flex-col max-h-full rounded-lg shadow-lg bg-neutral-25 ' +
+          className
+        }
         style={{ width }}
       >
         {children}
@@ -75,30 +90,40 @@ const Content = ({
   )
 }
 
-const CloseButton = ({ onClose }: { onClose: () => void }) => {
+const CloseButton = ({ onClose, className }: ICloseButtonProps) => {
   return (
     <Button
       size='small'
       variant='text'
-      className='absolute text-3xl top-1 right-2'
+      className={'absolute text-3xl top-2 right-2 ' + className}
       onClick={onClose}
       icon={X}
     />
   )
 }
 
-const Header = ({ children }: React.PropsWithChildren) => {
+const Header = ({
+  children,
+  className
+}: React.PropsWithChildren<{ className?: string }>) => {
   return (
-    <Dialog.Title className='px-6 py-4 border-b border-neutral-200'>
-      <h2 className='text-xl font-bold'>{children}</h2>
+    <Dialog.Title
+      className={'px-6 py-4 border-b border-neutral-200 ' + className}
+    >
+      {children}
     </Dialog.Title>
   )
 }
 
-const Body = ({ children }: React.PropsWithChildren) => {
+const Body = ({
+  children,
+  className
+}: React.PropsWithChildren<{ className?: string }>) => {
   return (
     <Dialog.Description
-      className='flex-grow px-6 py-2 overflow-auto overflow-indicator'
+      className={
+        'flex-grow px-6 py-3 overflow-auto overflow-indicator ' + className
+      }
       as='div'
     >
       {children}
@@ -106,9 +131,17 @@ const Body = ({ children }: React.PropsWithChildren) => {
   )
 }
 
-const Actions = ({ children }: React.PropsWithChildren) => {
+const Actions = ({
+  children,
+  className
+}: React.PropsWithChildren<{ className?: string }>) => {
   return (
-    <div className='flex justify-end gap-3 px-6 py-4 border-t border-neutral-200 '>
+    <div
+      className={
+        'flex justify-end gap-3 px-6 py-4 border-t border-neutral-200 ' +
+        className
+      }
+    >
       {children}
     </div>
   )
