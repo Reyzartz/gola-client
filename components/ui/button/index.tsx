@@ -115,15 +115,15 @@ const getTextStyles = (
   const styles = ['font-medium', 'tracking-wider']
 
   if (size === 'large') {
-    styles.push('text-lg')
-  }
-
-  if (size === 'medium') {
     styles.push('text-md')
   }
 
-  if (size === 'small') {
+  if (size === 'medium') {
     styles.push('text-sm')
+  }
+
+  if (size === 'small') {
+    styles.push('text-xs')
   }
 
   if (disabled) {
@@ -151,7 +151,7 @@ const getBorderStyles = (
   variant: TButtonVariant,
   disabled: boolean
 ) => {
-  const styles = ['rounded-md']
+  const styles = ['rounded-[4px]']
 
   if (variant === 'contained' || variant === 'text') {
     return styles
